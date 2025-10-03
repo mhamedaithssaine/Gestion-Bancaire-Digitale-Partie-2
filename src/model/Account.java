@@ -43,6 +43,9 @@ public class Account {
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
+    public void setNewBalance (BigDecimal newBalance){
+        this.balance  = balance.add(newBalance);
+    }
 
     public String getCurrency() {
         return currency;
@@ -59,4 +62,5 @@ public class Account {
     public void setClientId(UUID clientId) {
         this.clientId = clientId;
     }
+
 }

@@ -5,13 +5,12 @@ import model.type.AccountType;
 import repository.repositoryInterface.AccountRepository;
 import util.ConnexionDatabase;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class AccountRepositoryImp implements AccountRepository
 {
@@ -29,12 +28,13 @@ public class AccountRepositoryImp implements AccountRepository
             return rows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
+
     }
 
     @Override
-    public Optional<Account> findByAccountId(String accountId) {
+    public Optional<Account> findAccountById(String accountId) {
         String sql = "SELECT account_id, type, balance, currency, client_id FROM account WHERE account_id = ?";
         try (Connection conn = ConnexionDatabase.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -46,7 +46,7 @@ public class AccountRepositoryImp implements AccountRepository
                         AccountType.valueOf(rs.getString("type")),
                         rs.getBigDecimal("balance"),
                         rs.getString("currency"),
-                       UUID.fromString( rs.getString("client_id"))
+                       (UUID) rs.getObject("client_id")
                 ));
             }
         } catch (SQLException e) {
@@ -54,6 +54,57 @@ public class AccountRepositoryImp implements AccountRepository
         }
         return Optional.empty();
     }
+
+
+
+    @Override
+    public List<Account> listAccountsForClient(UUID clientId) {
+        List<Account> accounts = new ArrayList<>();
+        String sql = "SELECT account_id, type, balance, currency, client_id FROM account WHERE client_id = ?";
+        try (Connection conn = ConnexionDatabase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setObject(1, clientId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                accounts.add(new Account(
+                        rs.getString("account_id"),
+                        AccountType.valueOf(rs.getString("type")),
+                        rs.getBigDecimal("balance"),
+                        rs.getString("currency"),
+                        (UUID) rs.getObject("client_id")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return accounts;
+    }
+    @Override
+    public boolean updateAccount(Account account) {
+        String sql = "UPDATE account SET balance = ?, type = ?::account_type, currency = ?, client_id = ? WHERE account_id = ?";
+        try (Connection conn = ConnexionDatabase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setBigDecimal(1, account.getBalance());
+            stmt.setString(2, account.getType().name());
+            stmt.setString(3, account.getCurrency());
+            stmt.setObject(4, account.getClientId());
+            stmt.setString(5, account.getAccountId());
+
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean hasAccount(UUID clientId) {
+        return !listAccountsForClient(clientId).isEmpty();
+    }
+
 
     private String generateAccountId() {
         return "BK-" + java.time.Year.now().getValue() + "-" + String.format("%04d", new Random().nextInt(10000));

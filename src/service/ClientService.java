@@ -4,6 +4,7 @@ import model.Client;
 import repository.impl.ClientRepositoryImp;
 import repository.repositoryInterface.ClientRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 public class ClientService {
@@ -13,12 +14,15 @@ public class ClientService {
         this.clientRepository = new ClientRepositoryImp();
     }
 
-    public boolean createClient(String fullName, String email, String phone) {
-        Client client = new Client(fullName, email, phone);
+    public boolean createClient(Client client) {
         return clientRepository.createClient(client);
     }
 
     public Client findById(UUID id) {
         return clientRepository.findById(id).orElse(null);
+    }
+
+    public List<Client> listClientsWithAccounts() {
+        return clientRepository.listClientsWithAccounts();
     }
 }

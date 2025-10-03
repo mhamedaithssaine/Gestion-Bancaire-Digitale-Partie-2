@@ -5,32 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b3496d6-64cc-4ef5-87b6-31f665e2bd87" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/jbcrypt_0_4_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/lib__2_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Application Console de Gestion Bancaire Digitale Partie 2.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/postgresql-42.7.8.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/model/Account.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/model/Client.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/model/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/model/type/AccountType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/repository/impl/AccountRepositoryImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/repository/impl/ClientRepositoryImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/repository/impl/UserRepositoryImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/AccountRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/ClientRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/database.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/service/AccountService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/service/AuthService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/service/ClientService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/service/UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/util/ConnexionDatabase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/model/Credit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/model/type/TransactionStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/model/type/TransactionType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/repository/impl/CreditRepositoryImp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/repository/impl/TransactionRepositoryImp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/CreditRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/service/TransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/impl/AccountRepositoryImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/impl/AccountRepositoryImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/impl/ClientRepositoryImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/impl/ClientRepositoryImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/impl/TransactionReositoryImp.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/repositoryInterface/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/AccountRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/repositoryInterface/ClientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/ClientRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/repositoryInterface/TransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/TransactionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/ClientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/ClientService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,15 +33,27 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;mhamedaithssaine&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/mhamedaithssaine/Gestion-Bancaire-Digitale-Partie-2.git&quot;,
+    &quot;accountId&quot;: &quot;b4344612-363f-42ed-adc2-354e7ea4b5a9&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -60,23 +65,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Application.Main.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Youcode/IdeaProjects/Application Console de Gestion Bancaire Digitale Partie 2",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Youcode/IdeaProjects/Application Console de Gestion Bancaire Digitale Partie 2&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
