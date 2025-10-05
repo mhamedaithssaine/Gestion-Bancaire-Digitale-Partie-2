@@ -5,25 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b3496d6-64cc-4ef5-87b6-31f665e2bd87" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/model/Credit.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/model/type/TransactionStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/model/type/TransactionType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/repository/impl/CreditRepositoryImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/repository/impl/TransactionRepositoryImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/CreditRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/service/TransactionService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/service/CreditService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/BankRevenue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/BankRevenue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Credit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Credit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/type/TransactionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/type/TransactionType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/repository/impl/AccountRepositoryImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/impl/AccountRepositoryImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/repository/impl/ClientRepositoryImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/impl/ClientRepositoryImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/repository/impl/TransactionReositoryImp.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/impl/BankRevenueRepositoryImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/impl/BankRevenueRepositoryImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/impl/CreditRepositoryImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/impl/CreditRepositoryImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/impl/UserRepositoryImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/impl/UserRepositoryImp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/repository/repositoryInterface/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/AccountRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/repository/repositoryInterface/ClientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/ClientRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/repository/repositoryInterface/TransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/TransactionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/repositoryInterface/BankRevenueRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/BankRevenueRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/repositoryInterface/CreditRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/CreditRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/repositoryInterface/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/repositoryInterface/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/AccountService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/service/ClientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/ClientService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/BankRevenueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/BankRevenueService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/TransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,9 +32,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
         <option value="Interface" />
         <option value="Class" />
-        <option value="Enum" />
       </list>
     </option>
   </component>

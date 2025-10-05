@@ -10,5 +10,5 @@ public interface BankRevenueRepository {
     boolean save(BankRevenue revenue);
     Optional<BankRevenue> findById(UUID id);
     List<BankRevenue> findAll();
-    List<BankRevenue> findByTransferId(UUID transferId);
+    List<BankRevenue> findByTransferId(UUID transactionId);
 }

@@ -7,6 +7,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class UserRepositoryImp implements UserRepository {
 
@@ -93,4 +94,40 @@ public List<User> listeUsers(){
     }
     return  false ;
 }
+    @Override
+    public boolean updateUser(User user) {
+        String sql = "UPDATE \"user\" SET fullname = ?, email = ? WHERE id = ?";
+        try (Connection conn = ConnexionDatabase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, user.getFullName());
+            stmt.setString(2, user.getEmail());
+            stmt.setObject(3, user.getId());
+            System.out.println("Executing SQL: " + sql
+                    .replaceFirst("\\?", "'" + user.getFullName() + "'")
+                    .replaceFirst("\\?", "'" + user.getEmail() + "'")
+                    .replaceFirst("\\?", "'" + user.getId() + "'"));
+            int rowsAffected = stmt.executeUpdate();
+            System.out.println("Rows affected: " + rowsAffected);
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean changePassword(UUID userId, String newPassword) {
+        String sql = "UPDATE \"user\" SET password = ? WHERE id = ?";
+        try (Connection conn = ConnexionDatabase.getConnection();
+                     PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newPassword);
+            stmt.setObject(2, userId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Error changing password: " + e.getMessage());
+            return false;
+        }
+    }
 }

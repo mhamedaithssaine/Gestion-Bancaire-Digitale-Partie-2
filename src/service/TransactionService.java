@@ -8,6 +8,7 @@ import model.type.TransactionType;
 import repository.impl.TransactionRepositoryImp;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -118,18 +119,26 @@ public class TransactionService {
         Optional<Account> fromOpt = accountService.findByAccountId(fromAccountId);
         Optional<Account> toOpt = accountService.findByAccountId(toAccountId);
 
-        if (fromOpt.isEmpty() || toOpt.isEmpty()) {
-            System.out.println(" One of the accounts does not exist!");
+        if (fromOpt.isEmpty()) {
+            System.out.println(" Source account not found !");
             return false;
         }
 
         Account fromAccount = fromOpt.get();
-        Account toAccount = toOpt.get();
+        Account toAccount = null;
 
-        boolean sameClient = fromAccount.getClientId().equals(toAccount.getClientId());
-
+        boolean sameClient = false;
+        boolean isExternal = false;
         BigDecimal finalAmount = amount;
+        BigDecimal fees = BigDecimal.ZERO;
 
+
+        if (toOpt.isPresent()) {
+            toAccount = toOpt.get();
+            sameClient = fromAccount.getClientId().equals(toAccount.getClientId());
+        } else {
+            isExternal = true;
+        }
         if (sameClient) {
             if (!(
                     (fromAccount.getType() == AccountType.SAVINGS && toAccount.getType() == AccountType.CURRENT) ||
@@ -140,8 +149,7 @@ public class TransactionService {
                 return false;
             }
         } else {
-            if (fromAccount.getType() == AccountType.CURRENT && toAccount.getType() == AccountType.CURRENT) {
-                BigDecimal fees;
+            if (fromAccount.getType() == AccountType.CURRENT ) {
                 if (amount.compareTo(BigDecimal.valueOf(500)) <= 0) {
                     fees = amount.multiply(BigDecimal.valueOf(0.05));
                 } else if (amount.compareTo(BigDecimal.valueOf(1000)) <= 0) {
@@ -152,15 +160,12 @@ public class TransactionService {
                     fees = amount.multiply(BigDecimal.valueOf(0.50));
                 }
                 finalAmount = amount.subtract(fees);
-                BankRevenueService.getInstance().recordRevenue(
-                        "TRANSFER",
-                        "INTERBANK_FEES",
-                        fees,
-                        fromAccount.getCurrency(),
-                        Transaction.,
-                        "Bank fees collected for transfer"
-                );
-                System.out.println(" Fees applied: " + fees + " | Final transferred: " + finalAmount);
+
+                if (isExternal) {
+                    System.out.println(" External transfer detected → Fees applied: " + fees);
+                } else {
+                    System.out.println(" Interbank transfer detected → Fees applied: " + fees);
+                }
             } else {
                 System.out.println(" Transfer not allowed between these account types!");
                 return false;
@@ -173,18 +178,58 @@ public class TransactionService {
         }
 
         fromAccount.setBalance(fromAccount.getBalance().subtract(amount));
-        toAccount.setBalance(toAccount.getBalance().add(finalAmount));
-
         accountService.updateAccount(fromAccount);
-        accountService.updateAccount(toAccount);
+        if (!isExternal) {
+            toAccount.setBalance(toAccount.getBalance().add(finalAmount));
+            accountService.updateAccount(toAccount);
+        }
 
-        Transaction outTx = new Transaction(fromAccountId, userId, TransactionType.TRANSFEROUT, amount);
-        Transaction inTx = new Transaction(toAccountId, userId, TransactionType.TRANSFERIN, finalAmount);
+        Transaction outTx ;
 
-        transactionRepository.save(outTx);
-        transactionRepository.save(inTx);
-
+        if (isExternal) {
+            outTx = new Transaction(fromAccountId, userId, TransactionType.EXTERNAL_TRANSFER, amount);
+        } else {
+            outTx = new Transaction(fromAccountId, userId, TransactionType.TRANSFEROUT, amount);
+        }
+        try {
+            transactionRepository.save(outTx);
+            if (outTx.getId() == null) {
+                System.out.println("Erreur : l'ID de la transaction outTx n'a pas été généré !");
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la sauvegarde de outTx : " + e.getMessage());
+            return false;
+        }
+        if (!isExternal) {
+            Transaction inTx = new Transaction(toAccountId, userId, TransactionType.TRANSFERIN, finalAmount);
+            transactionRepository.save(inTx);
+        }
+        if (fees.compareTo(BigDecimal.ZERO) > 0) {
+            try {
+                System.out.println("Enregistrement des frais avec transfer_id : " + outTx.getId());
+                BankRevenueService.getInstance().recordRevenue(
+                        "TRANSFER",
+                        isExternal ? "EXTERNAL_FEES" : "INTERBANK_FEES",
+                        fees,
+                        fromAccount.getCurrency(),
+                        outTx.getId(),
+                        isExternal ? "Fees collected for external transfer" : "Bank fees collected for transfer"
+                );
+            } catch (Exception e) {
+                System.out.println("Erreur lors de l'enregistrement des frais : " + e.getMessage());
+                return false;
+            }
+        }
         return true;
+    }
+
+    public List<Transaction> getTransactionHistory(UUID userId, String accountId) {
+        if (accountId != null && !accountId.isEmpty()) {
+            return transactionRepository.findByAccountId(accountId);
+        } else {
+            return transactionRepository.findByUserId(userId);
+        }
     }
 
 

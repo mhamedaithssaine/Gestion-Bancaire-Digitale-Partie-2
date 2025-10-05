@@ -14,5 +14,7 @@ public interface AccountRepository {
     List<Account> listAccountsForClient(UUID clientId);
     boolean hasAccount(UUID clientId);
     boolean updateAccount(Account account);
+    boolean closeAccount(String accountId);
+    boolean updateAccountStatus(String accountId, boolean isActive);
 
 }

@@ -11,20 +11,20 @@ public class BankRevenue {
     private BigDecimal amount;
     private String currency;
     private LocalDateTime occurredAt;
-    private UUID transferId;
+    private UUID transactionId;
     private String note;
 
     public BankRevenue() {}
 
     public BankRevenue(String sourceType, String sourceSubType, BigDecimal amount,
-                       String currency, UUID transferId, String note) {
+                       String currency, UUID transactionId, String note) {
         this.id = UUID.randomUUID();
         this.sourceType = sourceType;
         this.sourceSubType = sourceSubType;
         this.amount = amount;
         this.currency = currency;
         this.occurredAt = LocalDateTime.now();
-        this.transferId = transferId;
+        this.transactionId = transactionId;
         this.note = note;
     }
 
@@ -76,12 +76,12 @@ public class BankRevenue {
         this.occurredAt = occurredAt;
     }
 
-    public UUID getTransferId() {
-        return transferId;
+    public UUID getTransactionId() {
+        return transactionId;
     }
 
-    public void setTransferId(UUID transferId) {
-        this.transferId = transferId;
+    public void setTransactionId(UUID transactionId) {
+        this.transactionId = transactionId;
     }
 
     public String getNote() {

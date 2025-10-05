@@ -35,7 +35,7 @@ public class BankRevenueRepositoryImp implements BankRevenueRepository {
             ps.setBigDecimal(4, revenue.getAmount());
             ps.setString(5, revenue.getCurrency());
             ps.setTimestamp(6, Timestamp.valueOf(revenue.getOccurredAt()));
-            ps.setObject(7, revenue.getTransferId());
+            ps.setObject(7, revenue.getTransactionId());
             ps.setString(8, revenue.getNote());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -101,7 +101,7 @@ public class BankRevenueRepositoryImp implements BankRevenueRepository {
         revenue.setAmount(rs.getBigDecimal("amount"));
         revenue.setCurrency(rs.getString("currency"));
         revenue.setOccurredAt(rs.getTimestamp("occurred_at").toLocalDateTime());
-        revenue.setTransferId((UUID) rs.getObject("transfer_id"));
+        revenue.setTransactionId((UUID) rs.getObject("transfer_id"));
         revenue.setNote(rs.getString("note"));
         return revenue;
     }

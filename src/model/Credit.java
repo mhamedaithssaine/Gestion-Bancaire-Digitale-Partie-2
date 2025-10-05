@@ -7,112 +7,36 @@ import java.util.UUID;
 public class Credit {
     private UUID id;
     private UUID clientId;
+    private String accountId;
     private BigDecimal amount;
-    private int durationMonths;
-    private BigDecimal interestRate;
-    private String incomeProof;
-    private BigDecimal monthlyPayment;
-    private LocalDateTime submissionDate;
-    private LocalDateTime decisionDate;
-    private String status;
-    private String comments;
+    private String currency;
+    private LocalDateTime requestedAt;
+    private String status; // PENDING, APPROVED, REJECTED
 
-    public Credit(UUID clientId, BigDecimal amount, int durationMonths, BigDecimal interestRate, String incomeProof) {
+    public Credit() {}
+
+    public Credit(UUID clientId, String accountId, BigDecimal amount, String currency) {
         this.id = UUID.randomUUID();
         this.clientId = clientId;
+        this.accountId = accountId;
         this.amount = amount;
-        this.durationMonths = durationMonths;
-        this.interestRate = interestRate;
-        this.incomeProof = incomeProof;
-        this.submissionDate = LocalDateTime.now();
+        this.currency = currency;
+        this.requestedAt = LocalDateTime.now();
         this.status = "PENDING";
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(UUID clientId) {
-        this.clientId = clientId;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public int getDurationMonths() {
-        return durationMonths;
-    }
-
-    public void setDurationMonths(int durationMonths) {
-        this.durationMonths = durationMonths;
-    }
-
-    public BigDecimal getInterestRate() {
-        return interestRate;
-    }
-
-    public void setInterestRate(BigDecimal interestRate) {
-        this.interestRate = interestRate;
-    }
-
-    public String getIncomeProof() {
-        return incomeProof;
-    }
-
-    public void setIncomeProof(String incomeProof) {
-        this.incomeProof = incomeProof;
-    }
-
-    public BigDecimal getMonthlyPayment() {
-        return monthlyPayment;
-    }
-
-    public void setMonthlyPayment(BigDecimal monthlyPayment) {
-        this.monthlyPayment = monthlyPayment;
-    }
-
-    public LocalDateTime getSubmissionDate() {
-        return submissionDate;
-    }
-
-    public void setSubmissionDate(LocalDateTime submissionDate) {
-        this.submissionDate = submissionDate;
-    }
-
-    public LocalDateTime getDecisionDate() {
-        return decisionDate;
-    }
-
-    public void setDecisionDate(LocalDateTime decisionDate) {
-        this.decisionDate = decisionDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
+    public UUID getClientId() { return clientId; }
+    public void setClientId(UUID clientId) { this.clientId = clientId; }
+    public String getAccountId() { return accountId; }
+    public void setAccountId(String accountId) { this.accountId = accountId; }
+    public BigDecimal getAmount() { return amount; }
+    public void setAmount(BigDecimal amount) { this.amount = amount; }
+    public String getCurrency() { return currency; }
+    public void setCurrency(String currency) { this.currency = currency; }
+    public LocalDateTime getRequestedAt() { return requestedAt; }
+    public void setRequestedAt(LocalDateTime requestedAt) { this.requestedAt = requestedAt; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

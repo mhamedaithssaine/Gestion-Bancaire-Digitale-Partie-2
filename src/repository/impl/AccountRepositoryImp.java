@@ -12,8 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class AccountRepositoryImp implements AccountRepository
-{
+public class AccountRepositoryImp implements AccountRepository {
     @Override
     public boolean createAccount(Account account) {
         String sql = "INSERT INTO account (account_id, type, balance, currency, client_id) VALUES (?, ?::account_type, ?, ?, ?)";
@@ -46,7 +45,7 @@ public class AccountRepositoryImp implements AccountRepository
                         AccountType.valueOf(rs.getString("type")),
                         rs.getBigDecimal("balance"),
                         rs.getString("currency"),
-                       (UUID) rs.getObject("client_id")
+                        (UUID) rs.getObject("client_id")
                 ));
             }
         } catch (SQLException e) {
@@ -56,11 +55,10 @@ public class AccountRepositoryImp implements AccountRepository
     }
 
 
-
     @Override
     public List<Account> listAccountsForClient(UUID clientId) {
         List<Account> accounts = new ArrayList<>();
-        String sql = "SELECT account_id, type, balance, currency, client_id FROM account WHERE client_id = ?";
+        String sql = "SELECT account_id, type, balance, currency, client_id FROM account WHERE client_id = ? AND is_active = true";
         try (Connection conn = ConnexionDatabase.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setObject(1, clientId);
@@ -79,6 +77,7 @@ public class AccountRepositoryImp implements AccountRepository
         }
         return accounts;
     }
+
     @Override
     public boolean updateAccount(Account account) {
         String sql = "UPDATE account SET balance = ?, type = ?::account_type, currency = ?, client_id = ? WHERE account_id = ?";
@@ -96,6 +95,39 @@ public class AccountRepositoryImp implements AccountRepository
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
+        }
+    }
+
+@Override
+public boolean closeAccount(String accountId) {
+    String sql = "UPDATE \"account\" SET is_active = false WHERE account_id = ? AND balance = 0";
+    try (Connection conn = ConnexionDatabase.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, accountId);
+        int rowsAffected = stmt.executeUpdate();
+        if (rowsAffected == 0) {
+            System.out.println("Cannot close account: Either account not found or balance is not zero.");
+            return false;
+        }
+        return true;
+    } catch (SQLException e) {
+        System.out.println("Error closing account: " + e.getMessage());
+        return false;
+    }
+}
+
+    @Override
+    public boolean updateAccountStatus(String accountId, boolean isActive) {
+        String sql = "UPDATE \"accounts\" SET is_active = ? WHERE account_id = ?";
+        try (Connection conn = ConnexionDatabase.getConnection();
+                     PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setBoolean(1, isActive);
+            stmt.setString(2, accountId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Error updating account status: " + e.getMessage());
             return false;
         }
     }

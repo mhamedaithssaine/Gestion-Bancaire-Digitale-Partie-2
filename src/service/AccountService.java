@@ -68,10 +68,43 @@ public class AccountService {
         return accountRepository.updateAccount(account);
     }
 
+    public boolean closeAccount(String accountId) {
+        if (!isAuthorized()) {
+            System.out.println("Access denied: Only TELLER, MANAGER, and ADMIN can close accounts.");
+            return false;
+        }
+        Optional<Account> accountOpt = findByAccountId(accountId);
+        if (accountOpt.isEmpty()) {
+            System.out.println("Account not found.");
+            return false;
+        }
+        return accountRepository.closeAccount(accountId);
+    }
+
+
+    public boolean updateAccountStatus(String accountId, boolean isActive) {
+        if (!isAuthorized()) {
+            System.out.println("Access denied: Only MANAGER and ADMIN can update account status.");
+            return false;
+        }
+        Optional<Account> accountOpt = findByAccountId(accountId);
+        if (accountOpt.isEmpty()) {
+            System.out.println("Account not found.");
+            return false;
+        }
+        return accountRepository.updateAccountStatus(accountId, isActive);
+    }
+
     public boolean hasAccount(UUID clientId) {
         return accountRepository.hasAccount(clientId);
     }
     private boolean isAuthorized() {
-        return "TELLER".equals(currentRole) || "ADMIN".equals(currentRole);
+        if("TELLER".equals(currentRole) || "ADMIN".equals(currentRole)){
+            return true;
+        } else if (("MANAGER".equals(currentRole) || "ADMIN".equals(currentRole))){
+            return true;
+        }
+
+        return false;
     }
 }

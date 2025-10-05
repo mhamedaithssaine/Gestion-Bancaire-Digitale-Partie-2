@@ -25,7 +25,7 @@ public class BankRevenueService {
         return instance;
     }
 
-    public boolean recordRevenue(String sourceType, String sourceSubType, BigDecimal amount, String currency, UUID transferId, String note) {
+    public boolean recordRevenue(String sourceType, String sourceSubType, BigDecimal amount, String currency, UUID trasactionId, String note) {
         BankRevenue revenue = new BankRevenue();
         revenue.setId(UUID.randomUUID());
         revenue.setSourceType(sourceType);
@@ -33,7 +33,7 @@ public class BankRevenueService {
         revenue.setAmount(amount);
         revenue.setCurrency(currency);
         revenue.setOccurredAt(LocalDateTime.now());
-        revenue.setTransferId(transferId);
+        revenue.setTransactionId(trasactionId);
         revenue.setNote(note);
 
         return revenueRepository.save(revenue);
