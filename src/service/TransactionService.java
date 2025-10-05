@@ -143,7 +143,8 @@ public class TransactionService {
             if (!(
                     (fromAccount.getType() == AccountType.SAVINGS && toAccount.getType() == AccountType.CURRENT) ||
                             (fromAccount.getType() == AccountType.CURRENT && toAccount.getType() == AccountType.SAVINGS) ||
-                            (fromAccount.getType() == AccountType.CURRENT && toAccount.getType() == AccountType.CREDIT)
+                            (fromAccount.getType() == AccountType.CURRENT && toAccount.getType() == AccountType.CREDIT) ||
+                            (fromAccount.getType() == AccountType.CREDIT && toAccount.getType() == AccountType.CURRENT)
             )) {
                 System.out.println("Invalid transfer type for the same client!");
                 return false;

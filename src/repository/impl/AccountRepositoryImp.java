@@ -13,6 +13,17 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class AccountRepositoryImp implements AccountRepository {
+
+    private static AccountRepositoryImp instance ;
+
+    private AccountRepositoryImp(){}
+    public static AccountRepositoryImp getInstance(){
+        if(instance == null){
+          return   instance = new AccountRepositoryImp();
+        }
+        return instance;
+    }
+
     @Override
     public boolean createAccount(Account account) {
         String sql = "INSERT INTO account (account_id, type, balance, currency, client_id) VALUES (?, ?::account_type, ?, ?, ?)";
@@ -119,7 +130,7 @@ public boolean closeAccount(String accountId) {
 
     @Override
     public boolean updateAccountStatus(String accountId, boolean isActive) {
-        String sql = "UPDATE \"accounts\" SET is_active = ? WHERE account_id = ?";
+        String sql = "UPDATE \"account\" SET is_active = ? WHERE account_id = ?";
         try (Connection conn = ConnexionDatabase.getConnection();
                      PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setBoolean(1, isActive);

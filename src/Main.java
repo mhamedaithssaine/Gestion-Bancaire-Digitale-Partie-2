@@ -385,15 +385,16 @@ public class Main {
                             System.out.println("Voulez-vous vraiment faire Request credit ? (yes/no)");
                             if ("yes".equalsIgnoreCase(scanner.nextLine().trim())) {
                                 System.out.println("Enter client ID: ");
-                                String clientIdInputCredit = scanner.nextLine();
+                                String clientIdInput = scanner.nextLine();
                                 System.out.println("Enter account ID (must be CREDIT type): ");
-                                String accountIdCredit = scanner.nextLine();
+                                String accountId = scanner.nextLine();
                                 System.out.println("Enter credit amount: ");
+                                BigDecimal amount = new BigDecimal(scanner.nextLine());
+                                System.out.println("Enter currency (MAD/EUR/USD): ");
+                                String currency = scanner.nextLine();
                                 try {
-                                    BigDecimal creditAmount = new BigDecimal(scanner.nextLine());
-                                    System.out.println("Enter currency (MAD/EUR/USD): ");
-                                    String currency = scanner.nextLine();
-                                    if (creditService.requestCredit(UUID.fromString(clientIdInputCredit), accountIdCredit, creditAmount, currency)) {
+                                    UUID clientId = UUID.fromString(clientIdInput);
+                                    if (CreditService.getInstance().requestCredit(clientId, accountId, amount, currency)) {
                                         System.out.println("Credit request submitted successfully!");
                                     } else {
                                         System.out.println("Failed to submit credit request.");
@@ -407,16 +408,18 @@ public class Main {
                             System.out.println("Voulez-vous vraiment faire Credit follow-up ? (yes/no)");
                             if ("yes".equalsIgnoreCase(scanner.nextLine().trim())) {
                                 System.out.println("Enter client ID: ");
-                                String clientIdFollowUp = scanner.nextLine();
+                                String clientIdInput = scanner.nextLine();
                                 try {
-                                    List<Credit> credits = creditService.creditFollowUp(UUID.fromString(clientIdFollowUp));
+                                    List<Credit> credits = CreditService.getInstance().creditFollowUp(UUID.fromString(clientIdInput));
                                     if (credits.isEmpty()) {
                                         System.out.println("No credit requests found for this client.");
                                     } else {
                                         System.out.println("Credit requests:");
-                                        credits.forEach(credit ->
-                                                System.out.println("ID: " + credit.getId() + ", Amount: " + credit.getAmount() + " " + credit.getCurrency() + ", Status: " + credit.getStatus() + ", Requested At: " + credit.getRequestedAt())
-                                        );
+                                        for (Credit credit : credits) {
+                                            System.out.println("ID: " + credit.getId() + ", Amount: " + credit.getAmount() +
+                                                    " " + credit.getCurrency() + ", Status: " + credit.getStatus() +
+                                                    ", Requested At: " + credit.getRequestedAt());
+                                        }
                                     }
                                 } catch (IllegalArgumentException e) {
                                     System.out.println("Invalid input: " + e.getMessage());
@@ -427,12 +430,12 @@ public class Main {
                             System.out.println("Voulez-vous vraiment faire Repayment ? (yes/no)");
                             if ("yes".equalsIgnoreCase(scanner.nextLine().trim())) {
                                 System.out.println("Enter credit ID: ");
-                                String creditIdInputRepay = scanner.nextLine();
+                                String creditIdInput = scanner.nextLine();
                                 System.out.println("Enter repayment amount: ");
+                                BigDecimal amount = new BigDecimal(scanner.nextLine());
                                 try {
-                                    UUID creditId = UUID.fromString(creditIdInputRepay);
-                                    BigDecimal repaymentAmount = new BigDecimal(scanner.nextLine());
-                                    if (creditService.repayCredit(creditId, repaymentAmount)) {
+                                    UUID creditId = UUID.fromString(creditIdInput);
+                                    if (CreditService.getInstance().repayCredit(creditId, amount)) {
                                         System.out.println("Repayment recorded successfully!");
                                     } else {
                                         System.out.println("Failed to record repayment.");
@@ -445,22 +448,34 @@ public class Main {
                         case 18:
                             System.out.println("Voulez-vous vraiment faire Approve/Reject credit ? (yes/no)");
                             if ("yes".equalsIgnoreCase(scanner.nextLine().trim())) {
-                                System.out.println("Enter credit ID: ");
-                                String creditIdInputApprove = scanner.nextLine();
-                                System.out.println("Enter action (approve/reject): ");
-                                String action = scanner.nextLine().toLowerCase();
-                                try {
-                                    UUID creditId = UUID.fromString(creditIdInputApprove);
-                                    if (creditService.approveOrRejectCredit(creditId, action)) {
-                                        System.out.println("Credit " + action + "d successfully!");
-                                    } else {
-                                        System.out.println("Failed to " + action + " credit.");
+                                List<Credit> credits = CreditService.getInstance().getCreditsByClient(null); // All credits
+                                if (credits.isEmpty()) {
+                                    System.out.println("No credits available.");
+                                } else {
+                                    System.out.println("Available credits:");
+                                    for (int i = 0; i < credits.size(); i++) {
+                                        Credit credit = credits.get(i);
+                                        System.out.println((i + 1) + ". ID: " + credit.getId() + ", Client ID: " + credit.getClientId() +
+                                                ", Amount: " + credit.getAmount() + " " + credit.getCurrency() + ", Status: " + credit.getStatus());
                                     }
-                                } catch (IllegalArgumentException e) {
-                                    System.out.println("Invalid input: " + e.getMessage());
+                                    System.out.println("Select credit number to approve/reject (1-" + credits.size() + "): ");
+                                    int choiceIdx = Integer.parseInt(scanner.nextLine().trim()) - 1;
+                                    if (choiceIdx >= 0 && choiceIdx < credits.size()) {
+                                        Credit selectedCredit = credits.get(choiceIdx);
+                                        System.out.println("Enter action (approve/reject): ");
+                                        String action = scanner.nextLine().trim().toLowerCase();
+                                        if (CreditService.getInstance().approveOrRejectCredit(selectedCredit.getId(), action)) {
+                                            System.out.println("Credit " + action + "d successfully!");
+                                        } else {
+                                            System.out.println("Failed to " + action + " credit.");
+                                        }
+                                    } else {
+                                        System.out.println("Invalid selection.");
+                                    }
                                 }
                             }
                             break;
+
                         case 19:
                             System.out.println("Voulez-vous vraiment faire Logout ? (yes/no)");
                             if ("yes".equalsIgnoreCase(scanner.nextLine().trim())) {
@@ -674,16 +689,18 @@ public class Main {
                             System.out.println("Voulez-vous vraiment faire Credit follow-up ? (yes/no)");
                             if ("yes".equalsIgnoreCase(scanner.nextLine().trim())) {
                                 System.out.println("Enter client ID: ");
-                                String clientIdFollowUpTeller = scanner.nextLine();
+                                String clientIdInput = scanner.nextLine();
                                 try {
-                                    List<Credit> credits = creditService.creditFollowUp(UUID.fromString(clientIdFollowUpTeller));
+                                    List<Credit> credits = CreditService.getInstance().creditFollowUp(UUID.fromString(clientIdInput));
                                     if (credits.isEmpty()) {
                                         System.out.println("No credit requests found for this client.");
                                     } else {
                                         System.out.println("Credit requests:");
-                                        credits.forEach(credit ->
-                                                System.out.println("ID: " + credit.getId() + ", Amount: " + credit.getAmount() + " " + credit.getCurrency() + ", Status: " + credit.getStatus() + ", Requested At: " + credit.getRequestedAt())
-                                        );
+                                        for (Credit credit : credits) {
+                                            System.out.println("ID: " + credit.getId() + ", Amount: " + credit.getAmount() +
+                                                    " " + credit.getCurrency() + ", Status: " + credit.getStatus() +
+                                                    ", Requested At: " + credit.getRequestedAt());
+                                        }
                                     }
                                 } catch (IllegalArgumentException e) {
                                     System.out.println("Invalid input: " + e.getMessage());
@@ -694,12 +711,12 @@ public class Main {
                             System.out.println("Voulez-vous vraiment faire Repayment ? (yes/no)");
                             if ("yes".equalsIgnoreCase(scanner.nextLine().trim())) {
                                 System.out.println("Enter credit ID: ");
-                                String creditIdInputRepayTeller = scanner.nextLine();
+                                String creditIdInput = scanner.nextLine();
                                 System.out.println("Enter repayment amount: ");
+                                BigDecimal amount = new BigDecimal(scanner.nextLine());
                                 try {
-                                    UUID creditId = UUID.fromString(creditIdInputRepayTeller);
-                                    BigDecimal repaymentAmount = new BigDecimal(scanner.nextLine());
-                                    if (creditService.repayCredit(creditId, repaymentAmount)) {
+                                    UUID creditId = UUID.fromString(creditIdInput);
+                                    if (CreditService.getInstance().repayCredit(creditId, amount)) {
                                         System.out.println("Repayment recorded successfully!");
                                     } else {
                                         System.out.println("Failed to record repayment.");
@@ -915,15 +932,16 @@ public class Main {
                             System.out.println("Voulez-vous vraiment faire Request credit ? (yes/no)");
                             if ("yes".equalsIgnoreCase(scanner.nextLine().trim())) {
                                 System.out.println("Enter client ID: ");
-                                String clientIdInputCreditManager = scanner.nextLine();
+                                String clientIdInput = scanner.nextLine();
                                 System.out.println("Enter account ID (must be CREDIT type): ");
-                                String accountIdCreditManager = scanner.nextLine();
+                                String accountId = scanner.nextLine();
                                 System.out.println("Enter credit amount: ");
+                                BigDecimal amount = new BigDecimal(scanner.nextLine());
+                                System.out.println("Enter currency (MAD/EUR/USD): ");
+                                String currency = scanner.nextLine();
                                 try {
-                                    BigDecimal creditAmount = new BigDecimal(scanner.nextLine());
-                                    System.out.println("Enter currency (MAD/EUR/USD): ");
-                                    String currency = scanner.nextLine();
-                                    if (creditService.requestCredit(UUID.fromString(clientIdInputCreditManager), accountIdCreditManager, creditAmount, currency)) {
+                                    UUID clientId = UUID.fromString(clientIdInput);
+                                    if (CreditService.getInstance().requestCredit(clientId, accountId, amount, currency)) {
                                         System.out.println("Credit request submitted successfully!");
                                     } else {
                                         System.out.println("Failed to submit credit request.");
@@ -937,16 +955,18 @@ public class Main {
                             System.out.println("Voulez-vous vraiment faire Credit follow-up ? (yes/no)");
                             if ("yes".equalsIgnoreCase(scanner.nextLine().trim())) {
                                 System.out.println("Enter client ID: ");
-                                String clientIdFollowUpManager = scanner.nextLine();
+                                String clientIdInput = scanner.nextLine();
                                 try {
-                                    List<Credit> credits = creditService.creditFollowUp(UUID.fromString(clientIdFollowUpManager));
+                                    List<Credit> credits = CreditService.getInstance().creditFollowUp(UUID.fromString(clientIdInput));
                                     if (credits.isEmpty()) {
                                         System.out.println("No credit requests found for this client.");
                                     } else {
                                         System.out.println("Credit requests:");
-                                        credits.forEach(credit ->
-                                                System.out.println("ID: " + credit.getId() + ", Amount: " + credit.getAmount() + " " + credit.getCurrency() + ", Status: " + credit.getStatus() + ", Requested At: " + credit.getRequestedAt())
-                                        );
+                                        for (Credit credit : credits) {
+                                            System.out.println("ID: " + credit.getId() + ", Amount: " + credit.getAmount() +
+                                                    " " + credit.getCurrency() + ", Status: " + credit.getStatus() +
+                                                    ", Requested At: " + credit.getRequestedAt());
+                                        }
                                     }
                                 } catch (IllegalArgumentException e) {
                                     System.out.println("Invalid input: " + e.getMessage());
@@ -957,12 +977,12 @@ public class Main {
                             System.out.println("Voulez-vous vraiment faire Repayment ? (yes/no)");
                             if ("yes".equalsIgnoreCase(scanner.nextLine().trim())) {
                                 System.out.println("Enter credit ID: ");
-                                String creditIdInputRepayManager = scanner.nextLine();
+                                String creditIdInput = scanner.nextLine();
                                 System.out.println("Enter repayment amount: ");
+                                BigDecimal amount = new BigDecimal(scanner.nextLine());
                                 try {
-                                    UUID creditId = UUID.fromString(creditIdInputRepayManager);
-                                    BigDecimal repaymentAmount = new BigDecimal(scanner.nextLine());
-                                    if (creditService.repayCredit(creditId, repaymentAmount)) {
+                                    UUID creditId = UUID.fromString(creditIdInput);
+                                    if (CreditService.getInstance().repayCredit(creditId, amount)) {
                                         System.out.println("Repayment recorded successfully!");
                                     } else {
                                         System.out.println("Failed to record repayment.");
@@ -975,19 +995,30 @@ public class Main {
                         case 15:
                             System.out.println("Voulez-vous vraiment faire Approve/Reject credit ? (yes/no)");
                             if ("yes".equalsIgnoreCase(scanner.nextLine().trim())) {
-                                System.out.println("Enter credit ID: ");
-                                String creditIdInputApproveManager = scanner.nextLine();
-                                System.out.println("Enter action (approve/reject): ");
-                                String action = scanner.nextLine().toLowerCase();
-                                try {
-                                    UUID creditId = UUID.fromString(creditIdInputApproveManager);
-                                    if (creditService.approveOrRejectCredit(creditId, action)) {
-                                        System.out.println("Credit " + action + "d successfully!");
-                                    } else {
-                                        System.out.println("Failed to " + action + " credit.");
+                                List<Credit> credits = CreditService.getInstance().getCreditsByClient(null);
+                                if (credits.isEmpty()) {
+                                    System.out.println("No credits available.");
+                                } else {
+                                    System.out.println("Available credits:");
+                                    for (int i = 0; i < credits.size(); i++) {
+                                        Credit credit = credits.get(i);
+                                        System.out.println((i + 1) + ". ID: " + credit.getId() + ", Client ID: " + credit.getClientId() +
+                                                ", Amount: " + credit.getAmount() + " " + credit.getCurrency() + ", Status: " + credit.getStatus());
                                     }
-                                } catch (IllegalArgumentException e) {
-                                    System.out.println("Invalid input: " + e.getMessage());
+                                    System.out.println("Select credit number to approve/reject (1-" + credits.size() + "): ");
+                                    int choiceIdx = Integer.parseInt(scanner.nextLine().trim()) - 1;
+                                    if (choiceIdx >= 0 && choiceIdx < credits.size()) {
+                                        Credit selectedCredit = credits.get(choiceIdx);
+                                        System.out.println("Enter action (approve/reject): ");
+                                        String action = scanner.nextLine().trim().toLowerCase();
+                                        if (CreditService.getInstance().approveOrRejectCredit(selectedCredit.getId(), action)) {
+                                            System.out.println("Credit " + action + "d successfully!");
+                                        } else {
+                                            System.out.println("Failed to " + action + " credit.");
+                                        }
+                                    } else {
+                                        System.out.println("Invalid selection.");
+                                    }
                                 }
                             }
                             break;

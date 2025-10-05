@@ -13,4 +13,5 @@ public interface CreditRepository {
     List<Credit> findByClientId(UUID clientId);
     boolean repayCredit(UUID creditId, BigDecimal amount);
     boolean approveOrRejectCredit(UUID creditId, String status);
+    List<Credit> findAll();
 }

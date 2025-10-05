@@ -18,7 +18,7 @@ public class AccountService {
     private final String currentRole;
 
     public AccountService(String currentRole) {
-        this.accountRepository = new AccountRepositoryImp();
+        this.accountRepository =  AccountRepositoryImp.getInstance();
         this.currentRole = currentRole;
     }
 

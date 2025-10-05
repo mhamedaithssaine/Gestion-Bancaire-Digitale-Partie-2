@@ -31,7 +31,7 @@ public class CreditRepositoryImp implements CreditRepository {
     public boolean createCredit(Credit credit) {
         String sql = "INSERT INTO \"credits\" (id, client_id, account_id, amount, currency, requested_at, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConnexionDatabase.getConnection();
-                     PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setObject(1, credit.getId());
             stmt.setObject(2, credit.getClientId());
             stmt.setString(3, credit.getAccountId());
@@ -51,7 +51,7 @@ public class CreditRepositoryImp implements CreditRepository {
     public Credit findById(UUID creditId) {
         String sql = "SELECT * FROM \"credits\" WHERE id = ?";
         try (Connection conn = ConnexionDatabase.getConnection();
-                     PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setObject(1, creditId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -97,11 +97,12 @@ public class CreditRepositoryImp implements CreditRepository {
             return credits;
         }
     }
+
     @Override
     public boolean repayCredit(UUID creditId, BigDecimal amount) {
         String sql = "UPDATE \"credits\" SET amount = amount - ? WHERE id = ? AND status = 'APPROVED'";
         try (Connection conn = ConnexionDatabase.getConnection();
-                     PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setBigDecimal(1, amount);
             stmt.setObject(2, creditId);
             int rowsAffected = stmt.executeUpdate();
@@ -120,7 +121,7 @@ public class CreditRepositoryImp implements CreditRepository {
         }
         String sql = "UPDATE \"credits\" SET status = ? WHERE id = ? AND status = 'PENDING'";
         try (Connection conn = ConnexionDatabase.getConnection();
-                     PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, status);
             stmt.setObject(2, creditId);
             int rowsAffected = stmt.executeUpdate();
@@ -135,4 +136,28 @@ public class CreditRepositoryImp implements CreditRepository {
         }
     }
 
+    @Override
+    public List<Credit> findAll() {
+        List<Credit> credits = new ArrayList<>();
+        String sql = "SELECT * FROM \"credits\"";
+        try (Connection conn = ConnexionDatabase.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Credit credit = new Credit();
+                credit.setId(UUID.fromString(rs.getString("id")));
+                credit.setClientId(UUID.fromString(rs.getString("client_id")));
+                credit.setAccountId(rs.getString("account_id"));
+                credit.setAmount(rs.getBigDecimal("amount"));
+                credit.setCurrency(rs.getString("currency"));
+                credit.setRequestedAt(rs.getObject("requested_at", LocalDateTime.class));
+                credit.setStatus(rs.getString("status"));
+                credits.add(credit);
+            }
+            return credits;
+        } catch (SQLException e) {
+            System.out.println("Error fetching all credits: " + e.getMessage());
+            return credits;
+        }
+    }
 }
